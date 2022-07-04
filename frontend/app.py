@@ -52,8 +52,8 @@ def main():
 
             with st.container():
 
-                options = st.multiselect('Columnas Gaus', header if header else [],[])
-                valPredC = st.text_input('Valor Calculo Gaus',value="", autocomplete=None, placeholder='Valor sin corchetes')
+                options = st.multiselect('Columnas (Gausiana y Arbol de Desición)', header if header else [],[])
+                valPredC = st.text_input('Valor Calculo (Gausiana y Arbol de Desición)',value="", autocomplete=None, placeholder='Valor sin corchetes')
 
             with st.form("form1"):
                 algo = st.selectbox('Algoritmo', [ 'Regresión lineal','Regresión polinomial','Clasificador Gaussiano'
@@ -66,19 +66,22 @@ def main():
 
                 if submitted:
                     json = {'data':data.to_json(orient = 'columns'),'x':x,'y':y, 'val':val,'algo':algo,'op':op,'degree':valDegree,'columns':options,'valC':valPredC}
-                    dataResponse = post(session,"http://lecx.pythonanywhere.com/api/algoritmo",json) 
-                    #dataResponse = post(session,"http://localhost:5000/api/algoritmo",json) 
+                    #dataResponse = post(session,"http://lecx.pythonanywhere.com/api/algoritmo",json) 
+                    dataResponse = post(session,"http://localhost:5000/api/algoritmo",json) 
     
         with col2:
-            st.write("Resultados")
-                    
+            st.subheader("Resultados")
+
+            if data is not None:                
+                st.write(data)
+
             if dataResponse is not None:
                 if dataResponse['code'] == '00':
                         st.success("Operacion procesada.")
-                        st.write(data)
-
-                        im = Image.open(io.BytesIO(base64.b64decode(dataResponse['img'])))
-                        st.image(im)
+                                            
+                        if dataResponse['img'] is not None and dataResponse['img'] != "":
+                            im = Image.open(io.BytesIO(base64.b64decode(dataResponse['img'])))
+                            st.image(im)
 
                         for tmp in dataResponse['info']:                         
                             st.code(tmp,language='python')
