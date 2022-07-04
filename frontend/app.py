@@ -66,8 +66,8 @@ def main():
 
                 if submitted:
                     json = {'data':data.to_json(orient = 'columns'),'x':x,'y':y, 'val':val,'algo':algo,'op':op,'degree':valDegree,'columns':options,'valC':valPredC}
-                    #dataResponse = post(session,"http://lecx.pythonanywhere.com/api/algoritmo",json) 
-                    dataResponse = post(session,"http://localhost:5000/api/algoritmo",json) 
+                    dataResponse = post(session,"http://lecx.pythonanywhere.com/api/algoritmo",json) 
+                    #dataResponse = post(session,"http://localhost:5000/api/algoritmo",json) 
     
         with col2:
             st.subheader("Resultados")
