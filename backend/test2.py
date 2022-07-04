@@ -5,6 +5,10 @@ from sklearn.naive_bayes import GaussianNB;
 
 df = pd.read_csv("pred.csv");
 
+print(df)
+
+
+1
 A = df['A']
 B = df['B']
 C = df['C']
@@ -19,6 +23,7 @@ print(P);
 
 
 features = list(zip(A, B, C, D));
+
 print(features);
 
 model = GaussianNB();

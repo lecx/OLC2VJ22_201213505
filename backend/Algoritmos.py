@@ -129,35 +129,33 @@ class Algoritmo():
         lines = []
 
         for i in range(sizeH):
-            print(np.asarray(data[cols[i]]))
-            lines.append(np.asarray(data[cols[i]]))
+            print(cols[i],le.fit_transform(np.asarray(data[cols[i]])))
+            lines.append(le.fit_transform(np.asarray(data[cols[i]])))
 
-        print(np.asarray(data[cols[sizeH]]))
+        print(cols[sizeH],np.asarray(data[cols[sizeH]]))
         play = np.asarray(data[cols[sizeH]])
 
-        valS = val.split(',')
-        valorPred = le.fit_transform(valS)
-
-        features = list(lines)
+        features = list(zip(*lines))
+        print("features",features)
         model = GaussianNB()
         model.fit(features, play)
-        predicted = model.predict([valorPred])  # sunny, hot, high, false
-        print("PREDICT VALUE: ", predicted)
-
-        img = Image.new('RGB', (700, 500), color='white')
-        d = ImageDraw.Draw(img)
-        myFont = ImageFont.truetype('arial.ttf', 30)
-
-        str1 = "Clasificador Gaussiano\n\n"
+        
+        info = []        
+        
+        str1 = ""        
         for i in lines:
             str1 += str(i) + '\n'
 
-        str1 += "\nValor de Prediccion: [" + val + "]\n"
-        d.text((10, 10), str1, font=myFont, fill='black')
-        img.save('gaus.png')
+        info.append(str1)
+        
+        if val != '':
+            valS = val.split(',')
+            valorPred = le.fit_transform(valS)
 
-        info = []
-        info.append("Prediccion = {}".format(str(predicted)))
+            predicted = model.predict([valorPred])  # sunny, hot, high, false
+            print("PREDICT VALUE: ", predicted)
+            info.append("Prediccion = {}".format(str(predicted)))
+        
         return info
 
     def graf_tree(self, data, cols, val):
@@ -168,39 +166,37 @@ class Algoritmo():
         lines = []
 
         for i in range(sizeH):
-            print(cols[i],np.asarray(data[cols[i]]))
-            lines.append(np.asarray(data[cols[i]]))
+            print(cols[i],le.fit_transform(np.asarray(data[cols[i]])))
+            lines.append(le.fit_transform(np.asarray(data[cols[i]])))
 
         print(cols[sizeH],np.asarray(data[cols[sizeH]]))
         play = np.asarray(data[cols[sizeH]])
 
-        valS = val.split(',')
-        valorPred = le.fit_transform(valS)
-        #valorPred = [int(i, base=16) for i in valS]
+        features = list(zip(*lines))
+        print("features",features)
 
-        features = list(lines)
         clf = DecisionTreeClassifier(max_depth=4,random_state=0)
         clf = clf.fit(features, play)
-        predicted = clf.predict([valorPred])
-        print("PREDICT VALUE: ", predicted)
 
-        plt.figure()
-        plot_tree(clf,filled=True,fontsize=12)
-        plt.savefig("arbol.png", format='png')                
-        plt.close()
-
-        #img = Image.new('RGB', (700, 500), color='white')
-        #d = ImageDraw.Draw(img)
-        #myFont = ImageFont.truetype('arial.ttf', 30)
-
+        info = []        
+        
         str1 = ""        
         for i in lines:
             str1 += str(i) + '\n'
 
-        #str1 += "\nValor de Prediccion: [" + val + "]\n"        
-        #d.text((10, 10), str1, font=myFont, fill='black')
-        
-        info = []
         info.append(str1)
-        info.append("Prediccion = {}".format(str(predicted)))
+        
+        if val != '':
+            valS = val.split(',')
+            valorPred = le.fit_transform(valS)
+    
+            predicted = clf.predict([valorPred])
+            print("PREDICT VALUE: ", predicted)
+            info.append("Prediccion = {}".format(str(predicted)))
+
+        plt.figure(figsize=(9,9))
+        plot_tree(clf,filled=True,fontsize=12)
+        plt.savefig("arbol.png", format='png')                
+        plt.close()
+
         return info

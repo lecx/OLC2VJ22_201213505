@@ -92,16 +92,17 @@ def do_calculate():
                 return jsonify({'code': '99', 'error': "No se seleccionaron columnas, intente nuevamente."}), 200
 
             val = params['valC']
-            if val is None or val == '':
-                return jsonify({'code': '99', 'error': "No se envio valor a clasificar, intente nuevamente."}), 200
+            #if val is None or val == '':
+             #   return jsonify({'code': '99', 'error': "No se envio valor a clasificar, intente nuevamente."}), 200
 
             df = pd.read_json(data, orient='columns')
             info = ope_algo.graf_gaus(df, columns, val)
 
-            with open("gaus.png", "rb") as img_file:
-                benc = base64.b64encode(img_file.read()).decode('utf-8')
-                #b = "data:image/png;base64,"+benc
-                resp = benc
+            resp = ""
+            #with open("gaus.png", "rb") as img_file:
+            #    benc = base64.b64encode(img_file.read()).decode('utf-8')
+            #    #b = "data:image/png;base64,"+benc
+            #   resp = benc
 
         elif algo == 'Clasificador de árboles de decisión':
             if op != 'Clasificacion':
@@ -112,8 +113,8 @@ def do_calculate():
                 return jsonify({'code': '99', 'error': "No se seleccionaron columnas, intente nuevamente."}), 200
 
             val = params['valC']
-            if val is None or val == '':
-                return jsonify({'code': '99', 'error': "No se envio valor a clasificar, intente nuevamente."}), 200
+            #if val is None or val == '':
+             #   return jsonify({'code': '99', 'error': "No se envio valor a clasificar, intente nuevamente."}), 200
 
             df = pd.read_json(data, orient='columns')
             info = ope_algo.graf_tree(df, columns, val)
