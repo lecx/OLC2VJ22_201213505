@@ -124,6 +124,18 @@ def do_calculate():
                 #b = "data:image/png;base64,"+benc
                 resp = benc
 
+        elif algo == 'Redes neuronales':
+            if op != 'Clasificacion':
+                return jsonify({'code': '99', 'error': "Operacion no valida, intente nuevamente."}), 200
+
+            columns = params['columns']
+            if columns is None or not columns:
+                return jsonify({'code': '99', 'error': "No se seleccionaron columnas, intente nuevamente."}), 200
+
+            resp = ""
+            df = pd.read_json(data, orient='columns')
+            info = ope_algo.graf_neu_net(df, columns)
+
         return jsonify({'code': '00', 'img': resp, 'info': info}), 200
 #    except Exception:
  #       return jsonify({'code': '99', 'error': "Error interno al realizar operacion, no bajar puntos Please!!"}), 200

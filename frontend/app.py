@@ -44,16 +44,20 @@ def main():
                 elif ext == 'json':
                     data = pd.read_json(spectra)
 
-                header = data.columns.values.tolist()            
-                x = st.selectbox('col X ' ,header)
-                y = st.selectbox('col Y ' ,header)
-                val = st.number_input('Valor Prediccion ', min_value=0, value=0 )
-                valDegree = st.number_input('Grado ', min_value=1, value=1 )
+            with st.container():
+                if data is not None:
+                    header = data.columns.values.tolist()            
+                    st.subheader("Conf. Algoritmos (Linear Y Polinomial)")
+                    x = st.selectbox('col X ' ,header)
+                    y = st.selectbox('col Y ' ,header)
+                    val = st.number_input('Valor Prediccion ', min_value=0, value=0 )
+                    valDegree = st.number_input('Grado ', min_value=1, value=1 )
 
             with st.container():
-
-                options = st.multiselect('Columnas (Gausiana y Arbol de Desición)', header if header else [],[])
-                valPredC = st.text_input('Valor Calculo (Gausiana y Arbol de Desición)',value="", autocomplete=None, placeholder='Valor sin corchetes')
+                if data is not None:
+                    st.subheader("Conf. Algoritmos (Gaussiana, Arbol de Desicion, Redes Neuronales)")
+                    options = st.multiselect('Columnas (Colocar al final columna P)', header if header else [],[])
+                    valPredC = st.text_input('Valor Calculo (Sin corchetes)',value="", autocomplete=None, placeholder='Valor sin corchetes')
 
             with st.form("form1"):
                 algo = st.selectbox('Algoritmo', [ 'Regresión lineal','Regresión polinomial','Clasificador Gaussiano'
@@ -66,8 +70,8 @@ def main():
 
                 if submitted:
                     json = {'data':data.to_json(orient = 'columns'),'x':x,'y':y, 'val':val,'algo':algo,'op':op,'degree':valDegree,'columns':options,'valC':valPredC}
-                    dataResponse = post(session,"http://lecx.pythonanywhere.com/api/algoritmo",json) 
-                    #dataResponse = post(session,"http://localhost:5000/api/algoritmo",json) 
+                    #dataResponse = post(session,"http://lecx.pythonanywhere.com/api/algoritmo",json) 
+                    dataResponse = post(session,"http://localhost:5000/api/algoritmo",json) 
     
         with col2:
             st.subheader("Resultados")
