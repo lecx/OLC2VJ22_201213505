@@ -38,7 +38,8 @@ class Algoritmo():
         info.append("RMSE = {}".format(np.round(rmse, 3)))
         info.append(" COEF = {}".format(np.round(coef, 3)))
         info.append("R2 = {}".format(np.round(r2, 3)))
-        info.append("Y = " + str(np.round(coef[0],3)) + "*X + "+str(np.round(regr.intercept_,3)))
+        cons = np.round(regr.intercept_,3)
+        info.append("Y = " + str(np.round(coef[0],3)) + "*X "+str(cons if cons < 0 else ("+" + str(cons))))
 
         plt.title('Regresion Lineal \n')
         plt.grid()
@@ -108,7 +109,8 @@ class Algoritmo():
             cons = np.round(coef[i], 3) 
             strFuncs = str(cons if cons < 0 else ("+" + str(cons))) + var + " " + strFuncs
 
-        strFuncs = "Y = " + strFuncs + " " + str(np.round(lin_reg2.intercept_,3)) + '\n'
+        cons = np.round(lin_reg2.intercept_,3)
+        strFuncs = "Y = " + strFuncs + " " + str(cons if cons < 0 else (" +" + str(cons))) + '\n'
 
         info.append(strFuncs)
 
